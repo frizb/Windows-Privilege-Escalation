@@ -85,3 +85,4 @@ https://technet.microsoft.com/en-us/sysinternals/bb664922
 
 https://pentest.blog/windows-privilege-escalation-methods-for-pentesters/
 
+https://hackmag.com/security/elevating-privileges-to-administrative-and-further/
