@@ -1,4 +1,6 @@
-**Enumeration**
+# Windows Enumeration for Privilege Escalation
+
+net config Workstation
 
 systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
 
@@ -47,18 +49,18 @@ add an extra command line flag to automatically accept the EULA.
 
 accesschk.exe /accepteula 
 
-# Find all weak folder permissions per drive.
+***Find all weak folder permissions per drive.***
 accesschk.exe -uwdqs Users c:\
 accesschk.exe -uwdqs "Authenticated Users" c:\
 
-# Find all weak file permissions per drive.
+***Find all weak file permissions per drive.***
 accesschk.exe -uwqs Users c:\*.*
 accesschk.exe -uwqs "Authenticated Users" c:\*.*
 
 accesschk.exe -ucqv Spooler
 
 
-**Unquoted Service Paths**
+*** Unquoted Service Paths ***
 A vulnerability that occurs if a service executable path is not enclosed with quotation marks and contains space.
 
 To identify these unquoted services you can run this command on Windows Command Shell:
