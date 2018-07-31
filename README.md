@@ -1,5 +1,11 @@
 # Windows-Privilege-Escalation
-Windows Privilege Escalation Techniques and Scripts
+My big 'Ol List of Windows Privilege Escalation Techniques and Scripts sorted by difficultly (Easy, Medium, Hard).
+
+*Easy*
+
+**Passwords**
+Passwords can be one of the easiest methods of privledge escalation and there are some tools that can help with this process.
+
 
 **CopyAndPasteFileDownloader.bat**
 
@@ -17,4 +23,9 @@ Basic notes on Windows Enumeration from the OSCP.
 **windows_recon.bat**
 
 An uploadable batch file for performing basic windows enumeration.
+
+
+**References**
+https://medium.com/@hakluke
+https://medium.com/@hakluke
 
