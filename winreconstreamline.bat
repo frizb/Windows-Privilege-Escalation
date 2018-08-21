@@ -19,7 +19,7 @@ findstr /si password *.xml *.ini *.txt >> report.txt
 reg query HKLM /f password /t REG_SZ /s >> report.txt
 reg query HKCU /f password /t REG_SZ /s >> report.txt
 cd\"Program Files"
-dir \s *.exe *.ini >> ..\report.txt
+dir /s *.exe *.ini >> ..\report.txt
 cd\"Program Files (x86)"
-dir \s *.exe *.ini >> ..\report.txt
+dir /s *.exe *.ini >> ..\report.txt
 cd\
