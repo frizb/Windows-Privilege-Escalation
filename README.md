@@ -25,9 +25,9 @@ Basic notes on Windows Enumeration from the OSCP.
 An uploadable batch file for performing basic windows enumeration.
 
 
-**References**
-https://medium.com/@hakluke
-https://daya.blog/2018/01/06/windows-privilege-escalation/
-https://pentestlab.blog/2017/04/19/stored-credentials/
-https://www.sploitspren.com/2018-01-26-Windows-Privilege-Escalation-Guide/
+**References**  
+https://medium.com/@hakluke  
+https://daya.blog/2018/01/06/windows-privilege-escalation/  
+https://pentestlab.blog/2017/04/19/stored-credentials/  
+https://www.sploitspren.com/2018-01-26-Windows-Privilege-Escalation-Guide/  
 
