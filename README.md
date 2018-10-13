@@ -40,6 +40,10 @@ C:\temp>testvb.vbs
 Access is denied.
 ```
 
+Now we can use a simple vb script
+
+
+### Uploading with PowerShell  
 
 
 Windows XP / Server 2003 / Windows 7
