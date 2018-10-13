@@ -1,5 +1,49 @@
 # Windows-Privilege-Escalation
-My big 'Ol List of Windows Privilege Escalation Techniques and Scripts sorted by difficultly (Easy, Medium, Hard).
+Here is my step-by-step windows privlege escalation methodology. As I learn more and encounter new situations, I will continue to update this page.
+
+## First things first
+Do some basic enumeration to figure out who we are, what OS this is, what privs we have and what patches have been installed.
+
+```
+whoami
+net user <username>
+systeminfo
+net config Workstation 
+net users 
+```
+
+## Uploading files to the Windows machine  
+Most of the time we will want to upload a file to the Windows machine in order to speed up our enumeration or to privilege escalate.  
+
+### Uploading with VBScript  
+First lets test to see if we can run VBScript  
+```
+echo WScript.StdOut.WriteLine "Yes we can run vbscript!" > testvb.vbs
+```
+Now we run it to see the results:  
+```
+cscript testvb.vbs
+```
+If you see the following message, we are good to go with VBScript!:  
+```
+C:\Users\Test>cscript testvb.vbs
+Microsoft (R) Windows Script Host Version 5.812
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Yes we can run vbscript!
+```
+If you see the following messages, you should move on to PowerShell:  
+```
+C:\temp>cscript testvb.vbs
+This program is blocked by group policy. For more information, contact your system administrator.
+C:\temp>testvb.vbs
+Access is denied.
+```
+
+
+
+Windows XP / Server 2003 / Windows 7
+
 
 *Easy*
 
