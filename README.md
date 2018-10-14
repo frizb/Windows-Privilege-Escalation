@@ -79,7 +79,16 @@ Try to download a file from a remote server to the windows temp folder:
 ```
 
 ### Uploading Files with Python
+Sometimes a Windows machine will have development tools like Python installed.
+Check for python
+```
+python -h
+```
 
+Download a file using Python:
+```
+python -c "import urllib.request; urllib.request.urlretrieve('http://10.10.10.10/cat.jpg', 'C:\\Users\\Public\\Downloads\\cat.jpg');"
+```
 
 ### Uploading Files with FTP
 
