@@ -12,6 +12,16 @@ net config Workstation
 net users 
 
 ```
+What is running on the machine?
+If we are able to run WMIC we can pull rich details on the services and applications running:
+```
+wmic service list full > services.txt
+wmic process > processes.txt
+```
+Or alternatively:
+```
+tasklist > processes.txt
+```
 
 ## Uploading files to the Windows machine  
 Sometimes we will want to upload a file to the Windows machine in order to speed up our enumeration or to privilege escalate.  Often you will find that uploading files is not needed in many cases if you are able to execute PowerShell that is hosted on a remote webserver (we will explore this more in the upgrading Windows Shell, Windows Enumeration and Windows Exploits sections).  Uploading files increased the chances of being detected by antivirus and leaves unnecssary data trail behind. 
