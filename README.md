@@ -479,7 +479,7 @@ https://www.abatchy.com/
 https://gist.github.com/egre55
 https://github.com/egre55/ultimate-file-transfer-list
 https://lolbas-project.github.io/
-
+https://www.absolomb.com/2018-01-26-Windows-Privilege-Escalation-Guide/
 
 
 
