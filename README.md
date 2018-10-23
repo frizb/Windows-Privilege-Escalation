@@ -21,6 +21,9 @@ We will look at 4 ways of uploading files to a remote Windows machine from Kali 
 3. Python HTTP Downloader
 4. FTP Downloader
 
+*NOTE* There are MANY more ways to move files back and forth between a Windows machine, most can be found on the LOLBAS project:
+https://lolbas-project.github.io/
+
 Most of these will require that we create a simple local webserver on our Kali box to sevre the files (NOTE: I have had issues running this command within TMUX for whatever reason... so dont run it in TMUX).
 I like to use the Python Simple HTTP Server:
 ```
@@ -175,6 +178,15 @@ Sometimes it is helpful to create a new Netcat session from an existed limited s
 
 
 # Windows Enumeration
+*NOTE* There are many executables that could provide privledge escalation if they are being run by a privledged user, most can be found on the incredible LOLBAS project:
+https://lolbas-project.github.io/
+
+## Automated Windows Enumeration Scripts
+We are also going to look a a few automated methods of performing Windows Enumeration including:
+* WindownPrivEsc.exe
+* Sherlock
+* Watson
+* JAWZ
 
 ### Running Sherlock
 Sherlock is a powershell library with a number of privledge escalation checkers built in. 
@@ -382,6 +394,9 @@ https://www.sploitspren.com/2018-01-26-Windows-Privilege-Escalation-Guide/
 https://www.abatchy.com/
 https://gist.github.com/egre55
 https://github.com/egre55/ultimate-file-transfer-list
+https://lolbas-project.github.io/
+
+
 
 
 
