@@ -36,6 +36,7 @@ root@kali:~/Documents/Exploits/WindowsPRIVZ# python -m pyftpdlib -p 21
 ```
 
 ### Uploading Files with VBScript  
+In my experiance, VBScript is one of the easiest methods of transfering files to a remote Windows. The only downside is that the file size you can transfer is rather limited.  I often have trouble transfering anything over 1 MB using this method and have to fall back on other methods (Windows-privesc-check2.exe is much too large to transfer using this method).  
 First lets test to see if we can run VBScript  
 ```
 echo WScript.StdOut.WriteLine "Yes we can run vbscript!" > testvb.vbs
