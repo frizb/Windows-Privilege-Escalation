@@ -510,15 +510,15 @@ An uploadable batch file for performing basic windows enumeration.
 **References**  
 https://medium.com/@hakluke  
 https://daya.blog/2018/01/06/windows-privilege-escalation/  
-https://pentestlab.blog/2017/04/19/stored-credentials/  
-https://www.sploitspren.com/2018-01-26-Windows-Privilege-Escalation-Guide/  
-https://www.abatchy.com/
-https://gist.github.com/egre55
-https://github.com/egre55/ultimate-file-transfer-list
-https://lolbas-project.github.io/
-https://www.absolomb.com/2018-01-26-Windows-Privilege-Escalation-Guide/
-https://github.com/GhostPack/Seatbelt
+https://pentestlab.blog/2017/04/19/stored-credentials/   
+https://www.sploitspren.com/2018-01-26-Windows-Privilege-Escalation-Guide/   
+https://www.abatchy.com/  
+https://gist.github.com/egre55  
+https://github.com/egre55/ultimate-file-transfer-list  
+https://lolbas-project.github.io/  
+https://www.absolomb.com/2018-01-26-Windows-Privilege-Escalation-Guide/  
+https://github.com/GhostPack/Seatbelt  
 https://github.com/rasta-mouse/Watson
-
+http://hackingandsecurity.blogspot.com/2017/09/oscp-windows-priviledge-escalation.html  
 
 
