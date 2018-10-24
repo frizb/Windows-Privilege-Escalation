@@ -1,7 +1,7 @@
 # Windows-Privilege-Escalation
 Here is my step-by-step windows privlege escalation methodology. This guide assumes you are starting with a very limited shell like a webshell, netcat reverse shell or a remote telnet connection. 
 
-## First things first
+## First things first and quick wins
 Do some basic enumeration to figure out who we are, what OS this is, what privs we have and what patches have been installed.
 
 ```
@@ -21,6 +21,10 @@ wmic process > processes.txt
 Or alternatively:
 ```
 tasklist > processes.txt
+```
+Has a Windows Auto-login Password been set?
+```
+reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"
 ```
 
 ## Uploading files to the Windows machine  
