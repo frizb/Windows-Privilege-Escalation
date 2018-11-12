@@ -25,7 +25,15 @@ tasklist > processes.txt
 Has a Windows Auto-login Password been set?
 ```
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"
+```  
+Dump a tree of all the files on the HDD  
 ```
+tree c:\ > c:\users\public\tree.txt
+```  
+or (slower method but provides more file details)  
+```  
+dir /s c:\ > c:\users\public\dir.txt
+```  
 
 ## Uploading files to the Windows machine  
 Sometimes we will want to upload a file to the Windows machine in order to speed up our enumeration or to privilege escalate.  Often you will find that uploading files is not needed in many cases if you are able to execute PowerShell that is hosted on a remote webserver (we will explore this more in the upgrading Windows Shell, Windows Enumeration and Windows Exploits sections).  Uploading files increased the chances of being detected by antivirus and leaves unnecssary data trail behind. 
