@@ -26,13 +26,13 @@ Has a Windows Auto-login Password been set?
 ```
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"
 ```  
-Dump a tree of all the files on the HDD  
+Dump a tree of all the folders / files on the HDD  
 ```
-tree c:\ > c:\users\public\tree.txt
+tree c:\ > c:\users\public\folders.txt
 ```  
-or (slower method but provides more file details)  
+or for a list of files:  
 ```  
-dir /s c:\ > c:\users\public\dir.txt
+dir /s c:\ > c:\users\public\files.txt
 ```  
 
 ## Uploading files to the Windows machine  
