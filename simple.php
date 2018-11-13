@@ -1,9 +1,3 @@
-GIF89a 
-
-  
-  
-  
-
 <body style="background-color:#424242;">
 <font style="float:right;" color="#F2F2F2"><b>php33r v0.2</b> - b33f</font><br /><br />
 
