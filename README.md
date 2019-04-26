@@ -175,7 +175,7 @@ https://github.com/SecureAuthCorp/impacket
 
 First we will setup the SMB Share on Kali like so:
 ```
-root@kali:~/smbshare# python /usr/local/bin/smbserver.py -smb2support smbshare ./
+root@kali:~# impacket-smbserver root /root/Desktop
 Impacket v0.9.16-dev - Copyright 2002-2017 Core Security Technologies
 
 [*] Config file parsed
@@ -186,6 +186,7 @@ Impacket v0.9.16-dev - Copyright 2002-2017 Core Security Technologies
 [*] Config file parsed
                                                                     
 ```
+
 Confirm it is up and running using Net View on the Windows command line:
 ```
 C:\Users\Null>net view \\192.168.0.49
